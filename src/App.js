@@ -1,9 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react'
+import Tasks from './tasks/Tasks'
 
 function App() {
   const [data, setData] = useState([])
+  const [tab, setTab] = useState("Home")
 
   const makeDataState = (data) => {
     let users = data.map((user) =>
@@ -67,8 +69,7 @@ function App() {
     fetch('/add_user', {
         method: 'post',
         body: data
-
-    }).then(response => {
+      }).then(response => {
       if(response.ok)
         return response.json();
       else {
@@ -81,28 +82,49 @@ function App() {
     })
   }
 
+  const changeTab = (tab) => {
+    setTab(tab);
+  }
+
   return (
     <div>
         <div>
-        Hello This the <a href="/">Home Page</a>
+          <div onClick={() => changeTab("Home")}>
+          Home
+          </div>
+          <div onClick={() => changeTab("Tasks")}>
+          Tasks
+          </div>
         </div>
-        <div>
-          {data}
-        </div>
-        <div onClick={() => deleteUsers()}>Delete Users</div>
-        <div>
-          <form id="add_user_form">
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" name="name"/>
-            <label htmlFor="email">Email:</label>
-            <input type="text" id="email" name="email"/>
-            <label htmlFor="age">Age:</label>
-            <input type="number" id="age" name="age"/>
-            <label htmlFor="image">Image:</label>
-            <input type="text" id="image" name="image"/>
-            <div onClick={ () => sendFormData()}>Add User</div>
-          </form>
-        </div>
+        {
+          tab == "Home" &&
+          <div>
+            <div>
+              {data}
+            </div>
+            <div onClick={() => deleteUsers()}>Delete Users</div>
+            <div>
+              <form id="add_user_form">
+                <label htmlFor="name">Name:</label>
+                <input type="text" id="name" name="name"/>
+                <label htmlFor="email">Email:</label>
+                <input type="text" id="email" name="email"/>
+                <label htmlFor="age">Age:</label>
+                <input type="number" id="age" name="age"/>
+                <label htmlFor="image">Image:</label>
+                <input type="text" id="image" name="image"/>
+                <div onClick={ () => sendFormData()}>Add User</div>
+              </form>
+            </div>
+          </div>
+        }
+
+        {tab == "Tasks" &&
+          <div>
+            Hello
+            <Tasks/>
+          </div>
+        }
       </div>
   );
 }
